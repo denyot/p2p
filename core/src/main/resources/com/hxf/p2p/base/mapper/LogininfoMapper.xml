@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.LogininfoMapper">
+    <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.Logininfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM logininfo
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.hxf.p2p.base.domain.Logininfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO logininfo (username, password, state
+        )
+        VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{state,jdbcType=BIT}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.Logininfo">
+        UPDATE logininfo
+        SET username = #{username,jdbcType=VARCHAR},
+            password = #{password,jdbcType=VARCHAR},
+            state    = #{state,jdbcType=BIT}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select id, username, password, state
+    from logininfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, username, password, state
+    from logininfo
+  </select>
+    <select id="getCountByUsername" resultType="int">
+    select  COUNT(*)
+    from logininfo WHERE username = #{username}
+  </select>
+</mapper>
