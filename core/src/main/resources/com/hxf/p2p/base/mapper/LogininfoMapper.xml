@@ -37,4 +37,8 @@
     select  COUNT(*)
     from logininfo WHERE username = #{username}
   </select>
+    <select id="login" resultMap="BaseResultMap">
+        SELECT id, username, password, state  from logininfo WHERE username =#{username} and password=#{password}
+    </select>
+
 </mapper>

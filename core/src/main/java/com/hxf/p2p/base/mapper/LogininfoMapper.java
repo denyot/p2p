@@ -1,6 +1,7 @@
 package com.hxf.p2p.base.mapper;
 
 import com.hxf.p2p.base.domain.Logininfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,4 +23,5 @@ public interface LogininfoMapper {
      */
     int getCountByUsername(String username);
 
+    Logininfo login(@Param("username") String username, @Param("password") String password);
 }

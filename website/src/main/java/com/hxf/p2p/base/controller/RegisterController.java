@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 用户注册
+ * 用户注册/登陆相关
  */
 @Controller
 public class RegisterController {
     @Autowired
     private ILogininfoService logininfoService;
 
-    @RequestMapping("/register")
+    @RequestMapping("register")
     @ResponseBody
-    public JsonResult login(String username, String password) {
+    public JsonResult register(String username, String password) {
         JsonResult json = new JsonResult();
         try {
             logininfoService.register(username, password);
@@ -28,4 +28,24 @@ public class RegisterController {
         }
         return json;
     }
+
+    @RequestMapping("checkUsername")
+    @ResponseBody
+    public boolean checkUsername(String username) {
+        return !logininfoService.checkUsername(username);
+    }
+    @RequestMapping("login")
+    @ResponseBody
+    public JsonResult login(String username, String password) {
+        JsonResult json = new JsonResult();
+        try {
+            logininfoService.login(username, password);
+        } catch (Exception e) {
+            json.setSuccess(false);
+            json.setMsg(e.getMessage());
+            e.printStackTrace();
+        }
+        return json;
+    }
+
 }

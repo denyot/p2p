@@ -10,4 +10,14 @@ public interface ILogininfoService {
      * @param password
      */
     void register(String username, String password);
+
+    /**
+     * 检查用户名是否存在
+     * @param username
+     * @return
+     */
+    boolean checkUsername(String username);
+
+    void login(String username, String password);
+
 }
