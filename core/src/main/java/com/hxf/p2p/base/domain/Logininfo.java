@@ -8,10 +8,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Logininfo extends BaseDomain {
+public class Logininfo{
     public static final int STATE_NORMAL = 0;//正常
     public static final int STATE_LOCK = 1;//锁定
-
+    private Long id;
     private String username;
     private String password;
     private int state;
