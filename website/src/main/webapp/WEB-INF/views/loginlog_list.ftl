@@ -4,19 +4,30 @@
     <title>胡心烽-P2P平台</title>
 <#include "common/links-tpl.ftl" />
 
-    <link type="text/css" rel="stylesheet" href="/css/account.css" />
+    <link type="text/css" rel="stylesheet" href="/css/account.css"/>
     <script type="text/javascript" src="/js/plugins/jquery.twbsPagination.min.js"></script>
     <script type="text/javascript" src="/js/plugins-override.js"></script>
     <script type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript">
-            $(function () {
-                $(".beginDate,.endDate").click(function () {
-                    WdatePicker();
-                });
-                $("#query").click(function () {
-                    $("#searchForm").submit();
-                })
+        $(function () {
+            $(".beginDate,.endDate").click(function () {
+                WdatePicker();
+            });
+            $("#query").click(function () {
+                $("#searchForm").submit();
             })
+            $("#state option[value=${qo.state}]").prop("selected", true)
+            $("#pagination").twbsPagination({
+                totalPages: ${(pageResult.totalPage)!0},
+                visiblePages: 5,
+                startPage:${pageResult.currentPage},
+                onPageClick: function (event, page) {
+                    $("#currentPage").val(page);
+
+                    $("#searchForm").submit();
+                }
+            })
+        })
     </script>
 </head>
 <body>
@@ -37,18 +48,20 @@
         <!-- 功能页面 -->
         <div class="col-sm-9">
             <form action="/loginlog_list" name="searchForm" id="searchForm" class="form-inline" method="post">
-                <input type="hidden" id="currentPage" name="currentPage" value="1" />
+                <input type="hidden" id="currentPage" name="currentPage" value='${qo.currentPage}'/>
                 <div class="form-group">
                     <label>时间范围</label>
-                    <input type="text" class="form-control beginDate" name="beginTime" value=''/>
+                    <input type="text" class="form-control beginDate" name="beginTime"
+                           value='${(qo.beginTime?string("yyyy-MM-dd"))!""}'/>
                 </div>
                 <div class="form-group">
                     <label></label>
-                    <input type="text" class="form-control endDate" name="endTime" value=''/>
+                    <input type="text" class="form-control endDate" name="endTime"
+                           value='${(qo.endTime?string("yyyy-MM-dd"))!""}'/>
                 </div>
                 <div class="form-group">
                     <label>状态</label>
-                    <select class="form-control" name="state">
+                    <select class="form-control" name="state" id="state">
                         <option value="-1">全部</option>
                         <option value="0">登录失败</option>
                         <option value="1">登录成功</option>
