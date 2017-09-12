@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.LoginlogMapper">
+    <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.Loginlog">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="loginTime" property="loginTime" jdbcType="TIMESTAMP"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM loginlog
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.hxf.p2p.base.domain.Loginlog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO loginlog (username, loginTime, ip,
+                              state)
+        VALUES (#{username,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{ip,jdbcType=VARCHAR},
+                #{state,jdbcType=BIT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.Loginlog">
+        UPDATE loginlog
+        SET username  = #{username,jdbcType=VARCHAR},
+            loginTime = #{loginTime,jdbcType=TIMESTAMP},
+            ip        = #{ip,jdbcType=VARCHAR},
+            state     = #{state,jdbcType=BIT}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select id, username, loginTime, ip, state
+    from loginlog
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, username, loginTime, ip, state
+    from loginlog
+  </select>
+    <sql id="where_id">
+        <where>
+            <if test="beginTime!=null">
+               AND loginTime &gt;= #{beginTime}
+            </if>
+            <if test="endTime!=null">
+               AND loginTime &lt;= #{endTime}
+            </if>
+            <if test="state>-1">
+               AND state = #{state}
+            </if>
+            <if test="username!=null">
+               AND username = #{username}
+            </if>
+        </where>
+    </sql>
+    <select id="queryCountForPage" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM loginlog
+        <include refid="where_id"/>
+    </select>
+    <select id="queryForPage" resultType="com.hxf.p2p.base.domain.Loginlog">
+        SELECT * FROM loginlog
+        <include refid="where_id"/>
+        ORDER BY loginTime DESC
+        <if test="pageSize!=null">
+        limit #{start},#{pageSize}
+        </if>
+    </select>
+</mapper>

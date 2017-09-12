@@ -1,5 +1,7 @@
 package com.hxf.p2p.base.service;
 
+import com.hxf.p2p.base.domain.Logininfo;
+
 /**
  * 登陆相关服务
  */
@@ -18,6 +20,6 @@ public interface ILogininfoService {
      */
     boolean checkUsername(String username);
 
-    void login(String username, String password);
+    Logininfo login(String username, String password, String remoteAddr);
 
 }

@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>蓝源Eloan-P2P平台->用户登录</title>
+    <title>P2P平台->用户登录</title>
     <link rel="stylesheet" href="js/bootstrap-3.3.2-dist/css/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="css/core.css" type="text/css" />
     <script type="text/javascript" src="js/jquery/jquery-2.1.3.js"></script>
@@ -96,13 +96,13 @@
         <div class="form-group">
             <label class="control-label col-sm-2">用户名</label>
             <div class="col-sm-10">
-                <input type="text" autocomplete="off" name="username" class="form-control" value="stef"/>
+                <input type="text" autocomplete="off" name="username" class="form-control" value="huxinfeng"/>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2">密&emsp;码</label>
             <div class="col-sm-10">
-                <input type="password" autocomplete="off" name="password" class="form-control" value="1111"/>
+                <input type="password" autocomplete="off" name="password" class="form-control" value="1234"/>
             </div>
         </div>
         <div class="form-gorup">

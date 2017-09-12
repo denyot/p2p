@@ -3,6 +3,9 @@ package com.hxf.p2p.base.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 个人信息
+ */
 @Getter
 @Setter
 public class Userinfo {

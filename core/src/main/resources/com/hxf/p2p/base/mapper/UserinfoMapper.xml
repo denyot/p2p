@@ -46,7 +46,7 @@
             kidCount_id            = #{kidCount.id,jdbcType=BIGINT},
             educationBackground_id = #{educationBackground.id,jdbcType=BIGINT},
             houseCondition_id      = #{houseCondition.id,jdbcType=BIGINT}
-        WHERE id = #{id,jdbcType=BIGINT}  and version = #{version}
+        WHERE id = #{id,jdbcType=BIGINT} AND version = #{version}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
     select id, version, bitState, realName, idNumber, phoneNumber, incomeGrade_id, marriage_id, 

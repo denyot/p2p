@@ -9,10 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Logininfo{
+    private Long id;//主键
     public static final int STATE_NORMAL = 0;//正常
     public static final int STATE_LOCK = 1;//锁定
-    private Long id;
-    private String username;
-    private String password;
-    private int state;
+    private String username;//用户名
+    private String password;//密码
+    private int state;//状态
 }

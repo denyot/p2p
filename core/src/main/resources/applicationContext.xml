@@ -41,4 +41,5 @@
     <context:annotation-config/>
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     <mybatis:scan base-package="com.hxf.p2p.base.mapper"/>
+
 </beans>

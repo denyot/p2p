@@ -13,4 +13,5 @@ public interface AccountMapper {
     List<Account> selectAll();
 
     int updateByPrimaryKey(Account record);
+
 }
