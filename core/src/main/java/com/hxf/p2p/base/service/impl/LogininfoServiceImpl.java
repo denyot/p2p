@@ -9,6 +9,7 @@ import com.hxf.p2p.base.mapper.LoginlogMapper;
 import com.hxf.p2p.base.service.IAccountService;
 import com.hxf.p2p.base.service.ILogininfoService;
 import com.hxf.p2p.base.service.IUserinfoService;
+import com.hxf.p2p.base.util.BidConst;
 import com.hxf.p2p.base.util.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class LogininfoServiceImpl implements ILogininfoService {
             logininfo.setState(Logininfo.STATE_NORMAL);
             logininfo.setUsername(username);
             logininfo.setPassword(password);
+            logininfo.setUserType(true);
             logininfoMapper.insert(logininfo);
             //初始化账户信息和个人信息
             Account account = new Account();
@@ -53,12 +55,13 @@ public class LogininfoServiceImpl implements ILogininfoService {
     }
 
     @Override
-    public Logininfo login(String username, String password, String remoteAddr) {
-        Logininfo current = logininfoMapper.login(username, password);
+    public Logininfo login(String username, String password, String remoteAddr, boolean userType) {
+        Logininfo current = logininfoMapper.login(username, password, userType);
         Loginlog loginlog = new Loginlog();
         loginlog.setIp(remoteAddr);
         loginlog.setLoginTime(new Date());
         loginlog.setUsername(username);
+        loginlog.setUserType(userType);
         if (current != null) {
             //把当前用户存放到session中
             loginlog.setState(true);
@@ -68,5 +71,18 @@ public class LogininfoServiceImpl implements ILogininfoService {
         }
         loginlogMapper.insert(loginlog);
         return current;
+    }
+
+    @Override
+    public void initAdmin() {
+        Integer count = logininfoMapper.getCountByUserType(true);
+        if (count == 0) {
+            Logininfo logininfo = new Logininfo();
+            logininfo.setState(Logininfo.STATE_NORMAL);
+            logininfo.setUsername(BidConst.INIT_ADMIN_NAME);
+            logininfo.setPassword(BidConst.INIT_ADMIN_PASSWORD);
+            logininfo.setUserType(false);
+            logininfoMapper.insert(logininfo);
+        }
     }
 }

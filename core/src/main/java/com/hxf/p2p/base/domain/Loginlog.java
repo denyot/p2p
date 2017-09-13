@@ -14,8 +14,9 @@ public class Loginlog {
 
     private Date loginTime;//登陆时间
 
-    private String ip;
+    private String ip;//ip地址
 
-    private Boolean state;
+    private Boolean state;//是否登陆成功
+    private boolean userType;//登陆用户类型
 
 }

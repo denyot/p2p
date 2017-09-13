@@ -60,7 +60,7 @@ public class RegisterController {
     @ResponseBody
     public JsonResult login(String username, String password, HttpServletRequest servletRequest) {
         JsonResult json = new JsonResult();
-        Logininfo current = logininfoService.login(username, password, servletRequest.getRemoteAddr());
+        Logininfo current = logininfoService.login(username, password, servletRequest.getRemoteAddr(),true);
         if (current == null) {
             json.setSuccess(false);
             json.setMsg("用户名或密码错误");

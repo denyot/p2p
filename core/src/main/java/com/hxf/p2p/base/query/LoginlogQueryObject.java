@@ -18,6 +18,11 @@ public class LoginlogQueryObject extends QueryObject {
     private int state = -1;
     private String username;
 
+    public String getUsername() {
+        return username == "" ? null : username;
+    }
+
+    private int userType = -1;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date getEndTime() {

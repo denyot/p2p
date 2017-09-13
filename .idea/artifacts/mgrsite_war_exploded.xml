@@ -7,6 +7,18 @@
           <element id="module-output" name="mgrsite" />
         </element>
         <element id="directory" name="lib">
+          <element id="archive" name="core-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="core" />
+          </element>
+          <element id="library" level="project" name="Maven: portlet-api:portlet-api:1.0" />
+          <element id="library" level="project" name="Maven: javax.servlet:jstl:1.0.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:4.1.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.1.2.RELEASE" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.5.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.5.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.5.0" />
+          <element id="library" level="project" name="Maven: org.freemarker:freemarker:2.3.20" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:4.1.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.16.6" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.36" />
           <element id="library" level="project" name="Maven: com.alibaba:druid:1.0.15" />
@@ -32,7 +44,6 @@
           <element id="library" level="project" name="Maven: org.apache.ant:ant:1.9.6" />
           <element id="library" level="project" name="Maven: org.apache.ant:ant-launcher:1.9.6" />
           <element id="library" level="project" name="Maven: taglibs:standard:1.1.2" />
-          <element id="library" level="project" name="Maven: org.freemarker:freemarker:2.3.20" />
           <element id="library" level="project" name="Maven: dom4j:dom4j:1.6.1" />
           <element id="library" level="project" name="Maven: xml-apis:xml-apis:1.0.b2" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.6" />

@@ -20,6 +20,7 @@ public interface ILogininfoService {
      */
     boolean checkUsername(String username);
 
-    Logininfo login(String username, String password, String remoteAddr);
+    Logininfo login(String username, String password, String remoteAddr, boolean userType);
 
+    void initAdmin();
 }

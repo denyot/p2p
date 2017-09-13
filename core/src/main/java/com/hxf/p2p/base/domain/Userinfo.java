@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 个人信息
+ * 个人资料
  */
 @Getter
 @Setter

@@ -6,31 +6,34 @@
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="state" property="state" jdbcType="BIT"/>
+        <result column="userType" property="userType" jdbcType="BIT"/>
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         DELETE FROM logininfo
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.hxf.p2p.base.domain.Logininfo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO logininfo (username, password, state
+        INSERT INTO logininfo (username, password, state, userType
         )
-        VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{state,jdbcType=BIT}
-        )
+        VALUES
+            (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{state,jdbcType=BIT}, #{userType,jdbcType=BIT}
+            )
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.Logininfo">
         UPDATE logininfo
         SET username = #{username,jdbcType=VARCHAR},
             password = #{password,jdbcType=VARCHAR},
-            state    = #{state,jdbcType=BIT}
+            state    = #{state,jdbcType=BIT},
+            userType = #{userType,jdbcType=BIT}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    select id, username, password, state
+    select id, username, password, state,userType
     from logininfo
     where id = #{id,jdbcType=INTEGER}
   </select>
     <select id="selectAll" resultMap="BaseResultMap">
-    select id, username, password, state
+    select id, username, password, state,userType
     from logininfo
   </select>
     <select id="getCountByUsername" resultType="int">
@@ -38,7 +41,12 @@
     from logininfo WHERE username = #{username}
   </select>
     <select id="login" resultMap="BaseResultMap">
-        SELECT id, username, password, state  from logininfo WHERE username =#{username} and password=#{password}
+        SELECT id, username, password, state,userType  from logininfo
+        WHERE username =#{username}
+        and password=#{password} and userType=#{userType}
+    </select>
+    <select id="getCountByUserType" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM  logininfo WHERE userType = #{userType}
     </select>
 
 </mapper>

@@ -32,6 +32,10 @@ public class Account {
 
     private BigDecimal borrowLimitAmount = BidConst.INIT_BORROW_LIMIT;//账户授信额度
 
+    /**
+     * 总金额
+     * @return
+     */
     public BigDecimal getTotalAmount() {
         return usableAmount.add(freezedAmount).add(unReceivePrincipal);
     }

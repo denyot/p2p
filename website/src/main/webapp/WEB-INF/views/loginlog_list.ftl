@@ -18,7 +18,7 @@
             })
             $("#state option[value=${qo.state}]").prop("selected", true)
             $("#pagination").twbsPagination({
-                totalPages: ${(pageResult.totalPage)!0},
+                totalPages: ${pageResult.totalPage},
                 visiblePages: 5,
                 startPage:${pageResult.currentPage},
                 onPageClick: function (event, page) {
@@ -105,6 +105,5 @@
         </div>
     </div>
 </div>
-<#include "common/footer-tpl.ftl" />
 </body>
 </html>

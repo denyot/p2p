@@ -7,6 +7,7 @@
         <result column="loginTime" property="loginTime" jdbcType="TIMESTAMP"/>
         <result column="ip" property="ip" jdbcType="VARCHAR"/>
         <result column="state" property="state" jdbcType="BIT"/>
+        <result column="userType" property="userType" jdbcType="BIT"/>
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         DELETE FROM loginlog
@@ -14,25 +15,26 @@
     </delete>
     <insert id="insert" parameterType="com.hxf.p2p.base.domain.Loginlog" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO loginlog (username, loginTime, ip,
-                              state)
+                              state, userType)
         VALUES (#{username,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{ip,jdbcType=VARCHAR},
-                #{state,jdbcType=BIT})
+                #{state,jdbcType=BIT}, #{userType,jdbcType=BIT})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.Loginlog">
         UPDATE loginlog
         SET username  = #{username,jdbcType=VARCHAR},
             loginTime = #{loginTime,jdbcType=TIMESTAMP},
             ip        = #{ip,jdbcType=VARCHAR},
-            state     = #{state,jdbcType=BIT}
+            state     = #{state,jdbcType=BIT},
+            userType  = #{userType,jdbcType=BIT}
         WHERE id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-    select id, username, loginTime, ip, state
+    select id, username, loginTime, ip, state,userType
     from loginlog
     where id = #{id,jdbcType=BIGINT}
   </select>
     <select id="selectAll" resultMap="BaseResultMap">
-    select id, username, loginTime, ip, state
+    select id, username, loginTime, ip, state,userType
     from loginlog
   </select>
     <sql id="where_id">
@@ -45,6 +47,9 @@
             </if>
             <if test="state>-1">
                AND state = #{state}
+            </if>
+            <if test="userType>-1">
+                AND userType = #{userType}
             </if>
             <if test="username!=null">
                AND username = #{username}

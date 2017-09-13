@@ -26,4 +26,14 @@ public class BidConst {
      * 初始授信额度
      */
     public static final BigDecimal INIT_BORROW_LIMIT = new BigDecimal("5000.0000");
+
+    /**
+     * 系统初始化管理员账号
+     */
+    public static final String INIT_ADMIN_NAME = "huxinfeng";
+    /**
+     * 系统初始化管理员密码
+     */
+    public static final String INIT_ADMIN_PASSWORD = "1111";
+
 }

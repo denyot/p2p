@@ -1,6 +1,5 @@
 package com.hxf.p2p.base.PageResult;
 
-import com.hxf.p2p.base.domain.Loginlog;
 import lombok.Getter;
 
 import java.util.List;
@@ -15,6 +14,10 @@ public class PageResult {
     private Integer totalPage; // 总页数
     private Integer prevPage; // 上一页
     private Integer nextPage; // 下一页
+
+    public Integer getTotalPage() {
+        return totalPage == 0 ? 1 : totalPage;
+    }
 
     public PageResult(Integer totalCount, List result, Integer currentPage, Integer pageSize) {
         super();
