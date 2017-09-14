@@ -8,12 +8,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
+        <module name="eloan-mockserver" />
         <module name="mgrsite" />
         <module name="website" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="core" target="1.8" />
+      <module name="eloan-mockserver" target="1.8" />
       <module name="mgrsite" target="1.8" />
       <module name="parent" target="1.8" />
       <module name="website" target="1.8" />

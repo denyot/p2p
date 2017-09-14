@@ -10,4 +10,12 @@ public interface IUserinfoService {
 
     Userinfo get(Long id);
 
+    /**
+     * 绑定手机
+     *
+     * @param phoneNumber 手机号
+     * @param verifyCode  验证码
+     */
+    void bindPhone(String phoneNumber, String verifyCode);
+
 }

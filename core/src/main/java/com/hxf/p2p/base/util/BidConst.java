@@ -35,5 +35,9 @@ public class BidConst {
      * 系统初始化管理员密码
      */
     public static final String INIT_ADMIN_PASSWORD = "1111";
+    /**
+     * 手机验证码有效时间(单位/s)
+     */
+    public static final int VERIFYCODE_VALIDATE_SECONDS = 300;
 
 }

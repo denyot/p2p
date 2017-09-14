@@ -5,6 +5,7 @@
     <file type="web" url="file://$PROJECT_DIR$/mgrsite" />
     <file type="web" url="file://$PROJECT_DIR$/parent/website" />
     <file type="web" url="file://$PROJECT_DIR$/website" />
+    <file type="web" url="file://$USER_HOME$/Videos/25-P2P互联网金融平台项目/P2P互联网金融平台项目SSM+Redis+Mysql+Bootstrap+JQuery等/其它p2p/三期项目/p2p/eloan-mockserver" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -13,6 +14,7 @@
         <option value="$PROJECT_DIR$/core/pom.xml" />
         <option value="$PROJECT_DIR$/website/pom.xml" />
         <option value="$PROJECT_DIR$/mgrsite/pom.xml" />
+        <option value="$USER_HOME$/Videos/25-P2P互联网金融平台项目/P2P互联网金融平台项目SSM+Redis+Mysql+Bootstrap+JQuery等/其它p2p/三期项目/p2p/eloan-mockserver/pom.xml" />
       </list>
     </option>
   </component>

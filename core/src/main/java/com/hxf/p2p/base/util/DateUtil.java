@@ -25,4 +25,8 @@ public class DateUtil {
         now = calendar.getTime();
         return now;
     }
+
+    public static Long secondsDelay(Date currentTime, Date lastTime) {
+        return Math.abs((currentTime.getTime() - lastTime.getTime()) / 1000);
+    }
 }

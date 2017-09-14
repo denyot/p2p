@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$USER_HOME$/Videos/25-P2P互联网金融平台项目/P2P互联网金融平台项目SSM+Redis+Mysql+Bootstrap+JQuery等/其它p2p/三期项目/p2p/eloan-mockserver/eloan-mockserver.iml" filepath="$USER_HOME$/Videos/25-P2P互联网金融平台项目/P2P互联网金融平台项目SSM+Redis+Mysql+Bootstrap+JQuery等/其它p2p/三期项目/p2p/eloan-mockserver/eloan-mockserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/mgrsite/mgrsite.iml" filepath="$PROJECT_DIR$/mgrsite/mgrsite.iml" />
       <module fileurl="file://$PROJECT_DIR$/parent/parent.iml" filepath="$PROJECT_DIR$/parent/parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/website/website.iml" filepath="$PROJECT_DIR$/website/website.iml" />

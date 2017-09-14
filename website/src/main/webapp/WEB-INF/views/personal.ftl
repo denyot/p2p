@@ -8,7 +8,57 @@
     <link type="text/css" rel="stylesheet" href="/css/account.css"/>
 
     <script type="text/javascript">
+        $(function () {
+            var sendVerifyCode = $("#sendVerifyCode");
+            $("#btn_showBindPhone").click(function () {
+                $("#bindPhoneModal").modal("show");
+            });
+            sendVerifyCode.click(function () {
+                sendVerifyCode.prop("disabled", true);
 
+                $.post("/sendVerifyCode", {phoneNumber: $("#phoneNumber").val()}, function (data) {
+                    if (data.success) {
+                        var sec = 8;
+                        var timer = window.setInterval(function () {
+                            sec--;
+                            if (sec > 0) {
+                                sendVerifyCode.text(sec + "秒重新发送");
+                            } else {
+                                window.clearInterval(timer);
+                                sendVerifyCode.text("重新发送");
+                                sendVerifyCode.prop("disabled", false);
+                            }
+                        }, 1000);
+                    } else {
+                        $.messager.popup(data.msg);
+                        sendVerifyCode.text("重新发送");
+                        sendVerifyCode.prop("disabled", false);
+                    }
+                }, "json");
+            });
+             $("#bindPhone").click(function () {
+                 alert(1);
+                 $("#bindForm").ajaxSubmit(function (data) {
+                     alert(2);
+                     if(data.success){
+                         alert(3);
+                         window.location.reload();
+                     }else {
+                         $.messager.popup(data.msg);
+                     }
+                 });
+             })
+            /* $("#bindForm").ajaxForm(function (data) {
+                 if (data.success) {
+                     window.location.reload();
+                 } else {
+                     $.messager.popup(data.msg);
+                 }
+             })*/
+            /*  $("#bindPhone").click(function () {
+                  $("#bindForm").submit();
+              });*/
+        });
     </script>
 </head>
 <body>
@@ -98,15 +148,17 @@
                                     </div>
                                     <div class="el-accoun-auth-right">
                                         <h5>手机认证</h5>
+                                    <#if userinfo.isBindPhone>
                                         <p>
                                             已认证
                                             <a href="#">查看</a>
                                         </p>
-                                        <h5>手机认证</h5>
+                                    <#else>
                                         <p>
                                             未认证
                                             <a id="btn_showBindPhone" href="javascript:;">立刻认证</a>
                                         </p>
+                                    </#if>
                                     </div>
                                     <div class="clearfix"></div>
                                     <p class="info">可以收到系统操作信息,并增加使用安全性</p>
@@ -158,8 +210,7 @@
         </div>
     </div>
 </div>
-
-
+<#if !userinfo.isBindPhone>
 <!-- 绑定手机模式窗口 -->
 <div class="modal fade" id="bindPhoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -193,7 +244,7 @@
         </div>
     </div>
 </div>
-
+</#if>
 
 <div class="modal fade" id="bindEmailModal" tabindex="-1" role="dialog" aria-labelledby="bindEmailModalLabel">
     <div class="modal-dialog" role="document">

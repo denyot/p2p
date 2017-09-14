@@ -1,5 +1,6 @@
 package com.hxf.p2p.base.domain;
 
+import com.hxf.p2p.base.util.BitStatesUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,5 +31,9 @@ public class Userinfo {
     private Systemdictionaryitem educationBackground;//学历
 
     private Systemdictionaryitem houseCondition;//居住状况
+
+    public Boolean getIsBindPhone() {
+        return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_BIND_PHONE);
+    }
 
 }
