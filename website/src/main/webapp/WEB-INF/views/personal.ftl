@@ -37,27 +37,14 @@
                 }, "json");
             });
              $("#bindPhone").click(function () {
-                 alert(1);
                  $("#bindForm").ajaxSubmit(function (data) {
-                     alert(2);
                      if(data.success){
-                         alert(3);
                          window.location.reload();
                      }else {
                          $.messager.popup(data.msg);
                      }
                  });
              })
-            /* $("#bindForm").ajaxForm(function (data) {
-                 if (data.success) {
-                     window.location.reload();
-                 } else {
-                     $.messager.popup(data.msg);
-                 }
-             })*/
-            /*  $("#bindPhone").click(function () {
-                  $("#bindForm").submit();
-              });*/
         });
     </script>
 </head>

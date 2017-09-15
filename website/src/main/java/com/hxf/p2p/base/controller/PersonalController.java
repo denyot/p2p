@@ -36,7 +36,6 @@ public class PersonalController {
         try {
             userinfoService.bindPhone(phoneNumber, verifyCode);
         } catch (Exception e) {
-            e.printStackTrace();
             jsonResult.setSuccess(false);
             jsonResult.setMsg(e.getMessage());
         }
