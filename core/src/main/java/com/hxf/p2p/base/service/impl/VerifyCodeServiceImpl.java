@@ -27,10 +27,11 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
 
     private String getHeader() {
         String auth = key + ":" + apikey;
-        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("UTF-8")));
         String authHeader = "Basic " + new String(encodedAuth);
         return authHeader;
     }
+
 
     @Override
     public void sendVerifyCode(String phoneNumber) {
@@ -42,20 +43,21 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
             //随机生成6位验证码
             String code = UUID.randomUUID().toString().substring(0, 6);
             try {
-                URL url = new URL(getHeader());
-                HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+                URL url = new URL(this.url);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 //拼接请求地址
                 StringBuilder content = new StringBuilder(100);
-                content.append("api=").append(apikey)
-                        .append("&mobile=").append(phoneNumber)
-                        .append("&message=").append("验证码是:").append(code).append(",5分钟内有效").append("[....科技]");
+                content.append("mobile=").append(phoneNumber)
+                        .append("&message=").append("系统验证码是:").append(code).append(",520秒内有效").append(",系统运行测试,无需回复!").append("【心烽科技】");
                 //设置请求方式
-                httpConnection.setRequestMethod("POST");
-                httpConnection.setDoOutput(true);
+                String header = getHeader();
+                connection.setRequestProperty("Authorization",header);
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
                 //获取输出流,写入数据
-                httpConnection.getOutputStream().write(content.toString().getBytes("UTF-8"));
-                String response = StreamUtils.copyToString(httpConnection.getInputStream(), Charset.forName("UTF-8"));
-                if (response.startsWith("success:")) {
+                connection.getOutputStream().write(content.toString().getBytes("UTF-8"));
+                String response = StreamUtils.copyToString(connection.getInputStream(), Charset.forName("UTF-8"));
+                if (response.contains("ok")) {
                     verifyCode = new VerifyCodeVo();
                     verifyCode.setPhoneNumber(phoneNumber);
                     verifyCode.setVerifyCode(code);
