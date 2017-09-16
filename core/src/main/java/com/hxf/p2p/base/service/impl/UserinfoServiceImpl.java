@@ -83,7 +83,7 @@ public class UserinfoServiceImpl implements IUserinfoService {
             String uuid = UUID.randomUUID().toString();
             //创建邮件
             StringBuilder content = new StringBuilder(100);
-            content.append("点击<a herf='").append(this.url).append("bindEmail?key=").append(uuid)
+            content.append("点击<a href='").append(this.url).append("bindEmail?key=").append(uuid)
                     .append("'>这里</a>完成邮箱绑定,有效期为").append(BidConst.VERIFYEMAIL_VALIDATE_DAY).append("天");
             //存储邮件信息
             try {
