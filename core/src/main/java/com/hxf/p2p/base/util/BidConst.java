@@ -39,5 +39,9 @@ public class BidConst {
      * 手机验证码有效时间(单位/s)
      */
     public static final int VERIFYCODE_VALIDATE_SECONDS = 300;
+    /**
+     * 邮箱验证连接有效时间(单位/天)
+     */
+    public static final int VERIFYEMAIL_VALIDATE_DAY =2;
 
 }

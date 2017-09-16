@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="eloan-mockserver:war">
+    <output-path>$USER_HOME$/Videos/25-P2P互联网金融平台项目/P2P互联网金融平台项目SSM+Redis+Mysql+Bootstrap+JQuery等/其它p2p/三期项目/p2p/eloan-mockserver/target</output-path>
+    <root id="archive" name="parent.war">
+      <element id="artifact" artifact-name="eloan-mockserver:war exploded" />
+    </root>
+  </artifact>
+</component>

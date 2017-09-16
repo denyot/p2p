@@ -13,9 +13,12 @@
             $("#btn_showBindPhone").click(function () {
                 $("#bindPhoneModal").modal("show");
             });
+            $("#btn_showBindEmail").click(function () {
+                $("#bindEmailModal").modal("show");
+            });
+
             sendVerifyCode.click(function () {
                 sendVerifyCode.prop("disabled", true);
-
                 $.post("/sendVerifyCode", {phoneNumber: $("#phoneNumber").val()}, function (data) {
                     if (data.success) {
                         var sec = 8;
@@ -36,15 +39,16 @@
                     }
                 }, "json");
             });
-             $("#bindPhone").click(function () {
-                 $("#bindForm").ajaxSubmit(function (data) {
-                     if(data.success){
-                         window.location.reload();
-                     }else {
-                         $.messager.popup(data.msg);
-                     }
-                 });
-             })
+            $("#bindEmail,#bindPhone").click(function () {
+                var _form = $(this).data("form");
+                $(_form).ajaxSubmit(function (data) {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        $.messager.popup(data.msg);
+                    }
+                });
+            })
         });
     </script>
 </head>
@@ -158,15 +162,17 @@
                                     </div>
                                     <div class="el-accoun-auth-right">
                                         <h5>邮箱认证</h5>
+                                    <#if userinfo.isBindEmail>
                                         <p>
                                             已绑定
                                             <a href="#">查看</a>
                                         </p>
-                                        <h5>邮箱认证</h5>
+                                    <#else>
                                         <p>
                                             未绑定
                                             <a id="btn_showBindEmail" href="javascript:;">立刻绑定</a>
                                         </p>
+                                    </#if>
                                     </div>
                                     <div class="clearfix"></div>
                                     <p class="info">您可以设置邮箱来接收重要信息</p>
@@ -226,13 +232,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="bindPhone">保存</button>
+                <button type="button" class="btn btn-primary" id="bindPhone" data-form="#bindForm">保存</button>
             </div>
         </div>
     </div>
 </div>
 </#if>
-
+<#if !userinfo.isBindEmail>
 <div class="modal fade" id="bindEmailModal" tabindex="-1" role="dialog" aria-labelledby="bindEmailModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -242,7 +248,7 @@
                 <h4 class="modal-title" id="bindEmailModalLabel">绑定邮箱</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="bindEmailForm" method="post" action="/bindEmail">
+                <form class="form-horizontal" id="bindEmailForm" method="post" action="/sendVerifyEmail">
                     <div class="form-group">
                         <label for="email" class="col-sm-2 control-label">邮箱地址:</label>
                         <div class="col-sm-6">
@@ -253,10 +259,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="bindEmail">发送验证邮件</button>
+                <button type="button" class="btn btn-primary" id="bindEmail" data-form="#bindEmailForm">发送验证邮件</button>
             </div>
         </div>
     </div>
 </div>
+</#if>
 </body>
 </html>

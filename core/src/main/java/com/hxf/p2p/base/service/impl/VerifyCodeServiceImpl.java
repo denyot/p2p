@@ -49,13 +49,14 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
                 StringBuilder content = new StringBuilder(100);
                 content.append("mobile=").append(phoneNumber)
                         .append("&message=").append("系统验证码是:").append(code).append(",520秒内有效").append(",系统运行测试,无需回复!").append("【心烽科技】");
+                connection.setRequestProperty("Authorization", this.getHeader());
                 //设置请求方式
-                String header = getHeader();
-                connection.setRequestProperty("Authorization",header);
                 connection.setRequestMethod("POST");
+                //有请求体
                 connection.setDoOutput(true);
                 //获取输出流,写入数据
                 connection.getOutputStream().write(content.toString().getBytes("UTF-8"));
+                //获取响应
                 String response = StreamUtils.copyToString(connection.getInputStream(), Charset.forName("UTF-8"));
                 if (response.contains("ok")) {
                     verifyCode = new VerifyCodeVo();
@@ -72,6 +73,7 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
             throw new RuntimeException("发送过于频繁,稍后再试");
         }
     }
+
 
     @Override
     public boolean verify(String phoneNumber, String verifyCode) {

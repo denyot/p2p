@@ -8,6 +8,11 @@ public interface IUserinfoService {
 
     void insert(Userinfo userinfo);
 
+    /**
+     * 以主键的方式获取个人资料
+     * @param id
+     * @return
+     */
     Userinfo get(Long id);
 
     /**
@@ -18,4 +23,18 @@ public interface IUserinfoService {
      */
     void bindPhone(String phoneNumber, String verifyCode);
 
+    /**
+     * 绑定邮箱
+     *
+     * @param key
+     */
+    void bindEmail(String key);
+
+    Userinfo getCurrent();
+
+    /**
+     * 发送验证邮件
+     * @param email
+     */
+    void sendVerifyEmail(String email);
 }

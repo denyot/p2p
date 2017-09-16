@@ -22,6 +22,8 @@ public class Userinfo {
 
     private String phoneNumber;//手机号
 
+    private String email;//邮箱
+
     private Systemdictionaryitem incomeGrade;//收入
 
     private Systemdictionaryitem marriage;//婚姻情况
@@ -32,8 +34,22 @@ public class Userinfo {
 
     private Systemdictionaryitem houseCondition;//居住状况
 
+    /**
+     * 是否绑定手机
+     *
+     * @return
+     */
     public Boolean getIsBindPhone() {
         return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_BIND_PHONE);
+    }
+
+    /**
+     * 是否绑定邮箱
+     *
+     * @return
+     */
+    public Boolean getIsBindEmail() {
+        return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_BIND_EMAIL);
     }
 
 }
