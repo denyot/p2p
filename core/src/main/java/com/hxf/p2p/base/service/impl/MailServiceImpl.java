@@ -41,7 +41,7 @@ public class MailServiceImpl implements IMailService {
                 return new PasswordAuthentication(userName, password);
             }
         };
-        // 使用环境属性和授权信息，创建邮件会话
+        // 使用环境属性和授权信息，创建邮件会话  我是分支
         Session mailSession = Session.getInstance(props, authenticator);
         // 创建邮件消息
         MimeMessage message = new MimeMessage(mailSession);
