@@ -19,16 +19,16 @@ public class VerifyCodeController {
     /**
      * 发送验证码
      *
-     * @param email 手机号
+     * @param phoneNumber 手机号
      * @return
      */
     @RequireLogin
     @RequestMapping("/sendVerifyCode")
     @ResponseBody
-    public JsonResult sendVerifyCode(String email) {
+    public JsonResult sendVerifyCode(String phoneNumber) {
         JsonResult jsonResult = new JsonResult();
         try {
-            verifyCodeService.sendVerifyCode(email);
+            verifyCodeService.sendVerifyCode(phoneNumber);
         } catch (Exception e) {
             jsonResult.setSuccess(false);
             jsonResult.setMsg(e.getMessage());

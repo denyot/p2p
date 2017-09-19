@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.RealAuthMapper">
+    <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.RealAuth">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="realname" property="realname" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="TINYINT"/>
+        <result column="birthDate" property="birthDate" jdbcType="VARCHAR"/>
+        <result column="idNumber" property="idNumber" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="image1" property="image1" jdbcType="VARCHAR"/>
+        <result column="image2" property="image2" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="auditTime" property="auditTime" jdbcType="TIMESTAMP"/>
+        <result column="applyTime" property="applyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="simpleResultMap" type="RealAuth" extends="BaseResultMap">
+        <association column="auditor_id" property="auditor" javaType="Logininfo"
+                     select="com.hxf.p2p.base.mapper.LogininfoMapper.selectByPrimaryKey"/>
+        <association column="applier_id" property="applier" javaType="Logininfo"
+                     select="com.hxf.p2p.base.mapper.LogininfoMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <resultMap id="joinQueryResultMap" type="RealAuth" extends="BaseResultMap">
+        <association property="applier" javaType="Logininfo" columnPrefix="ap_">
+            <id column="id" property="id"/>
+            <id column="username" property="username"/>
+        </association>
+        <association property="auditor" javaType="Logininfo" columnPrefix="au_">
+            <id column="id" property="id"/>
+            <id column="username" property="username"/>
+        </association>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM realauth
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.hxf.p2p.base.domain.RealAuth" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO realauth (realname, sex, birthDate,
+                              idNumber, address, state,
+                              image1, image2, remark,
+                              auditTime, applyTime, auditor_id,
+                              applier_id)
+        VALUES (#{realname,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{birthDate,jdbcType=VARCHAR},
+                                              #{idNumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+                                              #{state,jdbcType=TINYINT},
+                                              #{image1,jdbcType=VARCHAR}, #{image2,jdbcType=VARCHAR},
+                                              #{remark,jdbcType=VARCHAR},
+                                              #{auditTime,jdbcType=TIMESTAMP}, #{applyTime,jdbcType=TIMESTAMP},
+                #{auditor.id,jdbcType=BIGINT},
+                #{applier.id,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.RealAuth">
+        UPDATE realauth
+        SET realname   = #{realname,jdbcType=VARCHAR},
+            sex        = #{sex,jdbcType=TINYINT},
+            birthDate  = #{birthDate,jdbcType=VARCHAR},
+            idNumber   = #{idNumber,jdbcType=VARCHAR},
+            address    = #{address,jdbcType=VARCHAR},
+            state      = #{state,jdbcType=TINYINT},
+            image1     = #{image1,jdbcType=VARCHAR},
+            image2     = #{image2,jdbcType=VARCHAR},
+            remark     = #{remark,jdbcType=VARCHAR},
+            auditTime  = #{auditTime,jdbcType=TIMESTAMP},
+            applyTime  = #{applyTime,jdbcType=TIMESTAMP},
+            auditor_id = #{auditor.id,jdbcType=BIGINT},
+            applier_id = #{applier.id,jdbcType=BIGINT}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="simpleResultMap" parameterType="java.lang.Long">
+    select id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark, 
+    auditTime, applyTime, auditor_id, applier_id
+    from realauth
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="queryAll" resultMap="joinQueryResultMap">
+    select r.id, r.realname, r.sex, r.birthDate, r.idNumber, r.address, r.state, r.image1, r.image2, r.remark, r.
+    auditTime, r.applyTime, r.auditor_id, r.applier_id,ap.id ap_id,ap.username ap_username,au.id au_id,au.username au_username
+    from realauth r JOIN logininfo ap ON (r.applier_id=ap.id) LEFT JOIN logininfo au on(r.auditor_id=au.id)
+    </select>
+    <select id="selectAll" resultMap="simpleResultMap">
+    select id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark, 
+    auditTime, applyTime, auditor_id, applier_id
+    from realauth
+  </select>
+    <sql id="base_where">
+        <where>
+            <if test="beginTime!=null">
+                AND r.applyTime &gt;= #{beginTime}
+            </if>
+            <if test="endTime!=null">
+                AND r.applyTime &lt;= #{endTime}
+            </if>
+            <if test="state>-1">
+                AND r.state = #{state}
+            </if>
+        </where>
+    </sql>
+    <select id="queryCountForPage" resultType="java.lang.Long">
+        SELECT COUNT(id) FROM realauth r
+        <include refid="base_where"/>
+    </select>
+    <select id="queryForPage" resultMap="joinQueryResultMap">
+        select r.id, r.realname, r.sex, r.birthDate, r.idNumber, r.address, r.state, r.image1, r.image2, r.remark, r.
+        auditTime, r.applyTime, r.auditor_id, r.applier_id,ap.id ap_id,ap.username ap_username,au.id au_id,au.username au_username
+        from realauth r JOIN logininfo ap ON (r.applier_id=ap.id) LEFT JOIN logininfo au on(r.auditor_id=au.id)
+        <include refid="base_where"/>
+        <if test="pageSize!=null">
+        limit #{start},#{pageSize}
+        </if>
+    </select>
+</mapper>

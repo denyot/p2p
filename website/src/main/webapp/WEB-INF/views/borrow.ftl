@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>蓝源Eloan-P2P平台->我要借款</title>
+<title>胡心烽-P2P平台->我要借款</title>
 <#include "common/links-tpl.ftl" />
 </head>
 <body>
@@ -28,7 +28,7 @@
 					<ul>
 						<li>
 							<#if !(userinfo.isBaseInfo)>
-								<a href="/basicInfo.do">填写基本资料</a>
+								<a href="/basicInfo">填写基本资料</a>
 								<span class="glyphicon glyphicon-remove" style="color:red;"></span>
 							<#else>
 								填写基本资料<span class="glyphicon glyphicon-ok" style="color:green;"></span>
@@ -36,7 +36,7 @@
 						</li>
 						<li>
 							<#if !(userinfo.isRealAuth)>
-								<a href="/realAuth.do">身份认证</a>
+								<a href="/realAuth">身份认证</a>
 								<span class="glyphicon glyphicon-remove" style="color:red;"></span>
 							<#else>
 								身份认证<span class="glyphicon glyphicon-ok" style="color:green;"></span>
@@ -44,7 +44,7 @@
 						</li>
 						<li>
 							<#if (userinfo.authScore<creditBorrowScore)>
-								<a href="/userFile.do">材料认证分数达到${creditBorrowScore}分</a>
+								<a href="/userFile">材料认证分数达到${creditBorrowScore}分</a>
 								<span class="glyphicon glyphicon-remove" style="color:red;"></span>
 							<#else>
 								材料认证分数达到${creditBorrowScore}分<span class="glyphicon glyphicon-ok" style="color:green;">
@@ -59,7 +59,7 @@
 						</li>
 					</ul>
 					<#if userinfo.isBaseInfo && userinfo.isRealAuth && (userinfo.authScore >= creditBorrowScore) && userinfo.isVedioAuth>
-						<a href="/borrowInfo.do" class="el-borrow-apply">
+						<a href="/borrowInfo" class="el-borrow-apply">
 							申请贷款
 						</a>
 					<#else>
