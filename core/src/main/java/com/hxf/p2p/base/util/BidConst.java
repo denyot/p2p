@@ -42,6 +42,10 @@ public class BidConst {
     /**
      * 邮箱验证连接有效时间(单位/天)
      */
-    public static final int VERIFYEMAIL_VALIDATE_DAY =2;
+    public static final int VERIFYEMAIL_VALIDATE_DAY = 2;
+    /**
+     * 信用借贷最低合格分数
+     */
+    public static final int CREDIT_BORROW_SCORE = 30;
 
 }

@@ -1,6 +1,8 @@
 package com.hxf.p2p.base.mapper;
 
 import com.hxf.p2p.base.domain.Systemdictionary;
+import com.hxf.p2p.base.query.SystemDictionaryQueryObject;
+
 import java.util.List;
 
 public interface SystemdictionaryMapper {
@@ -13,4 +15,7 @@ public interface SystemdictionaryMapper {
     List<Systemdictionary> selectAll();
 
     int updateByPrimaryKey(Systemdictionary record);
+    Long queryCountForPage(SystemDictionaryQueryObject qo);
+
+    List<Systemdictionary> queryForPage(SystemDictionaryQueryObject qo);
 }

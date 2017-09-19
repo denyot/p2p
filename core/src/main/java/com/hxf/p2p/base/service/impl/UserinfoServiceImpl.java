@@ -95,9 +95,23 @@ public class UserinfoServiceImpl implements IUserinfoService {
                 throw new RuntimeException("邮箱发送失败");
             }
             //发送邮件
-            mailService.sendMail(email,"邮箱绑定验证连接",content.toString());
+            mailService.sendMail(email, "邮箱绑定验证连接", content.toString());
 
         }
+    }
+
+    @Override
+    public void updateBasicInfo(Userinfo userinfo) {
+        Userinfo old = this.getCurrent();
+        old.setEducationBackground(userinfo.getEducationBackground());
+        old.setHouseCondition(userinfo.getHouseCondition());
+        old.setIncomeGrade(userinfo.getIncomeGrade());
+        old.setKidCount(userinfo.getKidCount());
+        old.setMarriage(userinfo.getMarriage());
+        if (!old.getIsBaseInfo()) {
+            old.setBitState(BitStatesUtils.addState(old.getBitState(), BitStatesUtils.OP_BASE_INFO));
+        }
+        this.update(old);
     }
 
     @Override

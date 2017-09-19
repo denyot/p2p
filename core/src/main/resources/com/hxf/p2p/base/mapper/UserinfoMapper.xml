@@ -9,6 +9,7 @@
         <result column="idNumber" property="idNumber" jdbcType="VARCHAR"/>
         <result column="phoneNumber" property="phoneNumber" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="realAuthId" property="realAuthId" jdbcType="BIGINT"/>
         <association javaType="Systemdictionaryitem" column="incomeGrade_id" property="incomeGrade"
                      select="com.hxf.p2p.base.mapper.SystemdictionaryitemMapper.selectByPrimaryKey"/>
         <association javaType="Systemdictionaryitem" column="marriage_id" property="marriage"
@@ -25,22 +26,23 @@
         WHERE id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.hxf.p2p.base.domain.Userinfo">
-        INSERT INTO userinfo (id, version, bitState, realName,
+        INSERT INTO userinfo (id, version, bitState, realName, authScore,
                               idNumber, phoneNumber, email, incomeGrade_id,
                               marriage_id, kidCount_id, educationBackground_id,
-                              houseCondition_id)
-        VALUES (#{id}, 0, #{bitState,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR},
+                              houseCondition_id, realAuthId)
+        VALUES (#{id}, 0, #{bitState,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, #{authScore},
                        #{idNumber,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR},
-                       #{email} #{incomeGrade.id,jdbcType=BIGINT},
+                       #{email}, #{incomeGrade.id,jdbcType=BIGINT},
                        #{marriage.id,jdbcType=BIGINT}, #{kidCount.id,jdbcType=BIGINT},
                        #{educationBackground.id,jdbcType=BIGINT},
-                       #{houseCondition.id,jdbcType=BIGINT})
+                #{houseCondition.id,jdbcType=BIGINT}, #{realAuthId,jdbcType=BIGINT})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.Userinfo">
         UPDATE userinfo
         SET version                = #{version,jdbcType=INTEGER},
             bitState               = #{bitState,jdbcType=BIGINT},
             realName               = #{realName,jdbcType=VARCHAR},
+            authScore              = #{authScore},
             idNumber               = #{idNumber,jdbcType=VARCHAR},
             phoneNumber            = #{phoneNumber,jdbcType=VARCHAR},
             email                  = #{email,jdbcType=VARCHAR},
@@ -48,17 +50,18 @@
             marriage_id            = #{marriage.id,jdbcType=BIGINT},
             kidCount_id            = #{kidCount.id,jdbcType=BIGINT},
             educationBackground_id = #{educationBackground.id,jdbcType=BIGINT},
-            houseCondition_id      = #{houseCondition.id,jdbcType=BIGINT}
+            houseCondition_id      = #{houseCondition.id,jdbcType=BIGINT},
+            realAuthId             = #{realAuthId}
         WHERE id = #{id,jdbcType=BIGINT} AND version = #{version}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-    select id, version, bitState, realName, idNumber, phoneNumber, email,incomeGrade_id, marriage_id,
+    select id, realAuthId,version, bitState, realName,authScore, idNumber, phoneNumber, email,incomeGrade_id, marriage_id,
     kidCount_id, educationBackground_id, houseCondition_id
     from userinfo
     where id = #{id,jdbcType=BIGINT}
   </select>
     <select id="selectAll" resultMap="BaseResultMap">
-    select id, version, bitState, realName, idNumber, phoneNumber,email, incomeGrade_id, marriage_id,
+    select id, realAuthId,version, bitState, realName,authScore, idNumber, phoneNumber,email, incomeGrade_id, marriage_id,
     kidCount_id, educationBackground_id, houseCondition_id
     from userinfo
   </select>

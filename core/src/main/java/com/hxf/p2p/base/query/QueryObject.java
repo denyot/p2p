@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QueryObject {
-    protected Integer pageSize = 5;
+    protected Integer pageSize = 20;
     protected Integer currentPage = 1;
 
     public Integer getStart() {

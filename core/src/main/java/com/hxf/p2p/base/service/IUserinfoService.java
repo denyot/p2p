@@ -10,6 +10,7 @@ public interface IUserinfoService {
 
     /**
      * 以主键的方式获取个人资料
+     *
      * @param id
      * @return
      */
@@ -34,7 +35,14 @@ public interface IUserinfoService {
 
     /**
      * 发送验证邮件
+     *
      * @param email
      */
     void sendVerifyEmail(String email);
+
+    /**
+     * 更新用户基本信息
+     * @param userinfo
+     */
+    void updateBasicInfo(Userinfo userinfo);
 }

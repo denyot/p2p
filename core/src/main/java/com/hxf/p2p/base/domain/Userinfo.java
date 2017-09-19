@@ -15,6 +15,7 @@ public class Userinfo {
     private Integer version;//版本号
 
     private Long bitState;//用户状态码
+    private Long realAuthId;//实名认证id
 
     private String realName;//真实姓名
 
@@ -23,6 +24,8 @@ public class Userinfo {
     private String phoneNumber;//手机号
 
     private String email;//邮箱
+
+    private Integer authScore;//认证分数
 
     private Systemdictionaryitem incomeGrade;//收入
 
@@ -51,5 +54,31 @@ public class Userinfo {
     public Boolean getIsBindEmail() {
         return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_BIND_EMAIL);
     }
+
+    /**
+     * 是否填写用户资料
+     */
+    public Boolean getIsBaseInfo() {
+        return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_BASE_INFO);
+    }
+
+    /**
+     * 是否身份认证
+     *
+     * @return
+     */
+    public Boolean getIsRealAuth() {
+        return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_REAL_AUTH);
+    }
+
+    /**
+     * 是否视频认证
+     *
+     * @return
+     */
+    public Boolean getIsVedioAuth() {
+        return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_REAL_AUTH);
+    }
+
 
 }
