@@ -1,13 +1,12 @@
 package com.hxf.p2p.base.service.impl;
 
 import com.hxf.p2p.base.PageResult.PageResult;
-import com.hxf.p2p.base.domain.Account;
-import com.hxf.p2p.base.domain.BidRequest;
-import com.hxf.p2p.base.domain.BidRequestAuditHistory;
-import com.hxf.p2p.base.domain.Userinfo;
+import com.hxf.p2p.base.domain.*;
+import com.hxf.p2p.base.mapper.BidMapper;
 import com.hxf.p2p.base.mapper.BidRequestAuditHistoryMapper;
 import com.hxf.p2p.base.mapper.BidRequestMapper;
 import com.hxf.p2p.base.query.BidRequestQueryObject;
+import com.hxf.p2p.base.service.IAccountFlowService;
 import com.hxf.p2p.base.service.IAccountService;
 import com.hxf.p2p.base.service.IBidRequestService;
 import com.hxf.p2p.base.service.IUserinfoService;
@@ -19,6 +18,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +33,10 @@ public class BidRequestServiceImpl implements IBidRequestService {
     private IAccountService accountService;
     @Autowired
     private BidRequestAuditHistoryMapper bidRequestAuditHistoryMapper;
+    @Autowired
+    private BidMapper bidMapper;
+    @Autowired
+    private IAccountFlowService accountFlowService;
 
     @Override
     public void update(BidRequest bidRequest) {
@@ -134,5 +138,52 @@ public class BidRequestServiceImpl implements IBidRequestService {
         qo.setOrderBy("bidRequestState");
         qo.setOrderType("ASC");
         return bidRequestMapper.queryForPage(qo);
+    }
+
+    /**
+     * 投标
+     *
+     * @param bidRequestId 被投标的借款对象id
+     * @param amount       投标金额
+     */
+    @Override
+    public void bid(Long bidRequestId, BigDecimal amount) {
+        //当前用户
+        Logininfo current = UserContext.getCurrent();
+        //当前用户账户
+        Account currentAccount = accountService.getCurrent();
+        //得到借款对象
+        BidRequest bidRequest = bidRequestMapper.selectByPrimaryKey(bidRequestId);
+        //条件:借款存在且状态为招标中,投标人不是当前借款人,当前用户账户余额>=投标金额 等金额比较
+        if (bidRequest != null && bidRequest.getBidRequestState() == BidConst.BIDREQUEST_STATE_BIDDING
+                && bidRequest.getCreateUser().getId() != current.getId()
+                && currentAccount.getUsableAmount().compareTo(amount) >= 0
+                && amount.compareTo(bidRequest.getMinBidAmount()) >= 0
+                && amount.compareTo(bidRequest.getRemainAmount()) <= 0) {
+            //创建投标对象设置属性并保存
+            Bid bid = new Bid();
+            bid.setActualRate(bidRequest.getCurrentRate());
+            bid.setAvailableAmount(amount);
+            bid.setBidRequestId(bidRequestId);
+            bid.setBidRequestTitle(bidRequest.getTitle());
+            bid.setBidTime(new Date());
+            bid.setBidUser(current);
+            bidMapper.insert(bid);
+            //修改投标人账户
+            currentAccount.setUsableAmount(currentAccount.getUsableAmount().subtract(amount));
+            currentAccount.setFreezedAmount(currentAccount.getFreezedAmount().add(amount));
+            //生成投标流水
+            accountFlowService.bid(bid, currentAccount);
+            //修改借款状态
+            bidRequest.setBidCount(bidRequest.getBidCount() + 1);
+            bidRequest.setCurrentSum(bidRequest.getCurrentSum().add(amount));
+            //判断标是否投满
+            if (bidRequest.getCurrentSum().equals(bidRequest.getBidRequestAmount())) {
+                bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
+            }
+            accountService.update(currentAccount);
+            this.update(bidRequest);
+        }
+
     }
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class IRealAuthServiceImpl implements IRealAuthService {
+public class RealAuthServiceImpl implements IRealAuthService {
     @Autowired
     private RealAuthMapper realAuthMapper;
     @Autowired

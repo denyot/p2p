@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.AccountFlowMapper" >
+  <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.AccountFlow" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="accountActionType" property="accountActionType" jdbcType="TINYINT" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="freezed" property="freezed" jdbcType="DECIMAL" />
+    <result column="actionTime" property="actionTime" jdbcType="TIMESTAMP" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from accountflow
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hxf.p2p.base.domain.AccountFlow" useGeneratedKeys="true" keyProperty="id" >
+    insert into accountflow (accountActionType, amount, note, 
+      balance, freezed, actionTime, 
+      account_id)
+    values (#{accountActionType,jdbcType=TINYINT}, #{amount,jdbcType=DECIMAL}, #{note,jdbcType=VARCHAR}, 
+      #{balance,jdbcType=DECIMAL}, #{freezed,jdbcType=DECIMAL}, #{actionTime,jdbcType=TIMESTAMP}, 
+      #{accountId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.AccountFlow" >
+    update accountflow
+    set accountActionType = #{accountActionType,jdbcType=TINYINT},
+      amount = #{amount,jdbcType=DECIMAL},
+      note = #{note,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DECIMAL},
+      freezed = #{freezed,jdbcType=DECIMAL},
+      actionTime = #{actionTime,jdbcType=TIMESTAMP},
+      account_id = #{accountId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, accountActionType, amount, note, balance, freezed, actionTime, account_id
+    from accountflow
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, accountActionType, amount, note, balance, freezed, actionTime, account_id
+    from accountflow
+  </select>
+</mapper>

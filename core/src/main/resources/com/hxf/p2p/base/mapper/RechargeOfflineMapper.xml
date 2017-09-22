@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.RechargeOfflineMapper">
+    <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.RechargeOffline">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="auditTime" property="auditTime" jdbcType="TIMESTAMP"/>
+        <result column="applyTime" property="applyTime" jdbcType="TIMESTAMP"/>
+        <result column="tradeCode" property="tradeCode" jdbcType="VARCHAR"/>
+        <result column="tradeTime" property="tradeTime" jdbcType="TIMESTAMP"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <association column="auditor_id" property="auditor" javaType="Logininfo"
+                     select="com.hxf.p2p.base.mapper.LogininfoMapper.selectByPrimaryKey"/>
+        <association column="applier_id" property="applier" javaType="Logininfo"
+                     select="com.hxf.p2p.base.mapper.LogininfoMapper.selectByPrimaryKey"/>
+        <association column="bankInfo_id" property="bankInfo" javaType="PlatformBankInfo"
+                     select="com.hxf.p2p.base.mapper.PlatformBankInfoMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM rechargeoffline
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.hxf.p2p.base.domain.RechargeOffline" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO rechargeoffline (state, remark, auditTime,
+                                     applyTime, auditor_id, applier_id,
+                                     tradeCode, tradeTime, amount,
+                                     note, bankInfo_id)
+        VALUES (#{state,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP},
+                                           #{applyTime,jdbcType=TIMESTAMP}, #{auditor.id,jdbcType=BIGINT},
+                                           #{applier.id,jdbcType=BIGINT},
+                                           #{tradeCode,jdbcType=VARCHAR}, #{tradeTime,jdbcType=TIMESTAMP},
+                                           #{amount,jdbcType=DECIMAL},
+                                           #{note,jdbcType=VARCHAR}, #{bankInfo.id,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.RechargeOffline">
+        UPDATE rechargeoffline
+        SET state       = #{state,jdbcType=TINYINT},
+            remark      = #{remark,jdbcType=VARCHAR},
+            auditTime   = #{auditTime,jdbcType=TIMESTAMP},
+            applyTime   = #{applyTime,jdbcType=TIMESTAMP},
+            auditor_id  = #{auditor.id,jdbcType=BIGINT},
+            applier_id  = #{applier.id,jdbcType=BIGINT},
+            tradeCode   = #{tradeCode,jdbcType=VARCHAR},
+            tradeTime   = #{tradeTime,jdbcType=TIMESTAMP},
+            amount      = #{amount,jdbcType=DECIMAL},
+            note        = #{note,jdbcType=VARCHAR},
+            bankInfo_id = #{bankInfo.id,jdbcType=BIGINT}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, tradeCode, 
+    tradeTime, amount, note, bankInfo_id
+    from rechargeoffline
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, tradeCode, 
+    tradeTime, amount, note, bankInfo_id
+    from rechargeoffline
+  </select>
+    <sql id="base_where">
+        <where>
+            <if test="tradeBeginTime!=null">
+            AND tradeTime &gt;= #{tradeBeginTime}
+            </if>
+            <if test="tradeEndTime!=null">
+            AND tradeTime &lt;= #{tradeEndTime}
+            </if>
+            <if test="beginTime!=null">
+            AND applyTime &gt;= #{beginTime}
+        </if>
+            <if test="endTime!=null">
+            AND applyTime &lt;= #{endTime}
+        </if>
+            <if test="state>-1">
+            AND state = #{state}
+        </if>
+            <if test="tradeCode!=null">
+                and tradeCode LIKE concat('%',#{tradeCode},'%')
+            </if>
+            <if test="bankInfoId>-1">
+                AND bankInfo_id=#{bankInfoId}
+            </if>
+            <if test="applierId!=null">
+                AND applier_id = #{applierId}
+            </if>
+        </where>
+    </sql>
+    <select id="queryCountForPage" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM rechargeoffline
+        <include refid="base_where"/>
+    </select>
+    <select id="queryForPage" resultMap="BaseResultMap">
+        SELECT * FROM rechargeoffline
+        <include refid="base_where"/>
+        <if test="pageSize>0">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+</mapper>

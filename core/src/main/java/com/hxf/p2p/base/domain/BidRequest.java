@@ -63,7 +63,7 @@ public class BidRequest {
      * 计算投标进度
      */
     public BigDecimal getPersent() {
-        return currentSum.divide(bidRequestAmount, BidConst.DISPLAY_SCALE, RoundingMode.HALF_UP);
+        return currentSum.divide(bidRequestAmount, BidConst.DISPLAY_SCALE, RoundingMode.HALF_UP).multiply(new BigDecimal("100"));
     }
 
     /**

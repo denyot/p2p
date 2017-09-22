@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class IUserFileServiceImpl implements IUserFileService {
+public class UserFileServiceImpl implements IUserFileService {
     @Autowired
     private UserfileMapper userfileMapper;
 

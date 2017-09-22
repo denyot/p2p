@@ -4,6 +4,7 @@ import com.hxf.p2p.base.PageResult.PageResult;
 import com.hxf.p2p.base.domain.BidRequest;
 import com.hxf.p2p.base.query.BidRequestQueryObject;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface IBidRequestService {
@@ -35,5 +36,7 @@ public interface IBidRequestService {
 
     List<BidRequest> listIndex(int size);
 
+
+    void bid(Long bidRequestId, BigDecimal amount);
 
 }

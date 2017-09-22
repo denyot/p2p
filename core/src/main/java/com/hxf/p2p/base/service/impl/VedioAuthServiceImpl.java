@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class IVedioAuthServiceImpl implements IVedioAuthService {
+public class VedioAuthServiceImpl implements IVedioAuthService {
     @Autowired
     private VedioAuthMapper vedioAuthMapper;
     @Autowired

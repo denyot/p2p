@@ -12,4 +12,7 @@ public interface IAccountService {
 
     Account get(Long id);
 
+    Account getCurrent();
+
+
 }
