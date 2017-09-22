@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.UserfileMapper">
+    <resultMap id="smallResultMap" type="Userfile">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="image" property="image" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.Userfile" extends="smallResultMap">
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="auditTime" property="auditTime" jdbcType="TIMESTAMP"/>
+        <result column="applyTime" property="applyTime" jdbcType="TIMESTAMP"/>
+        <result column="score" property="score" jdbcType="TINYINT"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM userfile
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO userfile (state, remark, auditTime,
+                              applyTime, auditor_id, applier_id,
+                              score, image, filetype_id
+        )
+        VALUES (#{state,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP},
+                #{applyTime,jdbcType=TIMESTAMP}, #{auditor.id,jdbcType=BIGINT}, #{applier.id,jdbcType=BIGINT},
+                #{score,jdbcType=TINYINT}, #{image,jdbcType=VARCHAR}, #{filetype.id,jdbcType=BIGINT}
+        )
+    </insert>
+    <update id="updateByPrimaryKey">
+        UPDATE userfile
+        SET state       = #{state,jdbcType=TINYINT},
+            remark      = #{remark,jdbcType=VARCHAR},
+            auditTime   = #{auditTime,jdbcType=TIMESTAMP},
+            applyTime   = #{applyTime,jdbcType=TIMESTAMP},
+            auditor_id  = #{auditor.id,jdbcType=BIGINT},
+            applier_id  = #{applier.id,jdbcType=BIGINT},
+            score       = #{score,jdbcType=TINYINT},
+            image       = #{image,jdbcType=VARCHAR},
+            filetype_id = #{filetype.id,jdbcType=BIGINT}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, score, image, 
+    filetype_id
+    from userfile
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, score, image, 
+    filetype_id
+    from userfile
+  </select>
+    <select id="listUnTypeFiles" resultMap="smallResultMap">
+    SELECT id,image FROM userfile WHERE applier_id =#{logininfoId} and filetype_id is null
+  </select>
+</mapper>

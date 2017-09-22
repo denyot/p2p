@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.BidMapper">
+    <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.Bid">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="actualRate" property="actualRate" jdbcType="DECIMAL"/>
+        <result column="availableAmount" property="availableAmount" jdbcType="DECIMAL"/>
+        <result column="bidrequest_id" property="bidRequestId" jdbcType="BIGINT"/>
+        <result column="bidTime" property="bidTime" jdbcType="TIMESTAMP"/>
+        <result column="bidRequestTitle" property="bidRequestTitle" jdbcType="VARCHAR"/>
+        <association column="bidUser_id" property="bidUser" javaType="Logininfo"
+                     select="com.hxf.p2p.base.mapper.LogininfoMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM bid
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.hxf.p2p.base.domain.Bid" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bid (actualRate, availableAmount, bidrequest_id,
+                         bidUser_id, bidTime, bidRequestTitle
+        )
+        VALUES (#{actualRate,jdbcType=DECIMAL}, #{availableAmount,jdbcType=DECIMAL}, #{bidRequestId,jdbcType=BIGINT},
+                #{bidUser.id,jdbcType=BIGINT}, #{bidTime,jdbcType=TIMESTAMP}, #{bidRequestTitle,jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.Bid">
+        UPDATE bid
+        SET actualRate      = #{actualRate,jdbcType=DECIMAL},
+            availableAmount = #{availableAmount,jdbcType=DECIMAL},
+            bidrequest_id   = #{bidRequestId,jdbcType=BIGINT},
+            bidUser_id      = #{bidUser.id,jdbcType=BIGINT},
+            bidTime         = #{bidTime,jdbcType=TIMESTAMP},
+            bidRequestTitle = #{bidRequestTitle,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select id, actualRate, availableAmount, bidrequest_id, bidUser_id, bidTime, bidRequestTitle
+    from bid
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, actualRate, availableAmount, bidrequest_id, bidUser_id, bidTime, bidRequestTitle
+    from bid
+  </select>
+    <select id="selectByRequestId" resultMap="BaseResultMap">
+    select id, actualRate, availableAmount, bidrequest_id, bidUser_id, bidTime, bidRequestTitle
+    from bid
+    WHERE bidrequest_id = #{bidRequestId}
+    </select>
+</mapper>

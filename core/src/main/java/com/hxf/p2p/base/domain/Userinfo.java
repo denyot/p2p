@@ -14,7 +14,7 @@ public class Userinfo {
 
     private Integer version;//版本号
 
-    private Long bitState;//用户状态码
+    private Long bitState = 0l;//用户状态码
     private Long realAuthId;//实名认证id
 
     private String realName;//真实姓名
@@ -36,6 +36,14 @@ public class Userinfo {
     private Systemdictionaryitem educationBackground;//学历
 
     private Systemdictionaryitem houseCondition;//居住状况
+
+    /**
+     * 移除状态码
+     */
+    public void removeState(Long state) {
+        setBitState(BitStatesUtils.removeState(this.bitState, state));
+    }
+
 
     /**
      * 是否绑定手机
@@ -78,6 +86,15 @@ public class Userinfo {
      */
     public Boolean getIsVedioAuth() {
         return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_REAL_AUTH);
+    }
+
+    /**
+     * 是否有借款流程
+     *
+     * @return
+     */
+    public Boolean getHasBidrequstProcess() {
+        return BitStatesUtils.hasState(this.bitState, BitStatesUtils.OP_HAS_BIDREQUST_IN_PROCESS);
     }
 
 
