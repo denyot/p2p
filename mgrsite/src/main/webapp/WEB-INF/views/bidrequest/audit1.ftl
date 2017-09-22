@@ -18,7 +18,7 @@
 		});
 
 		$('#pagination').twbsPagination({
-			totalPages : ${pageResult.totalPage}||1,
+			totalPages : ${pageResult.totalPage},
 			startPage : ${pageResult.currentPage},
 			visiblePages : 5,
 			onPageClick : function(event, page) {
@@ -72,7 +72,7 @@
 				<div class="page-header">
 					<h3>满标一审管理</h3>
 				</div>
-				<form id="searchForm" class="form-inline" method="post" action="/bidrequest_audit1_list.do">
+				<form id="searchForm" class="form-inline" method="post" action="/bidrequest_audit1_list">
 					<input type="hidden" id="currentPage" name="currentPage" value=""/>
 				</form>
 				<div class="panel panel-default">
@@ -91,10 +91,10 @@
 							</tr>
 						</thead>
 						<tbody>
-						<#list pageResult.listData as data>
+						<#list pageResult.result as data>
 							<tr>
 								<td>
-									<a target="_blank" href="/borrow_info.do?id=${data.id}">${data.title}</a>&emsp;<span class="label label-primary">信</span>
+									<a target="_blank" href="/borrow_info?id=${data.id}">${data.title}</a>&emsp;<span class="label label-primary">信</span>
 								</td>
 								<td>${data.createUser.username}</td>
 								<td>${(data.publishTime?string("yyyy-MM-dd HH:mm:SS"))!'未发布'}</td>
@@ -120,7 +120,7 @@
 		  <div class="modal-dialog modal-lg" role="document">
 		    <div class="modal-content">
 		      <div class="modal-body">
-		      	<form class="form-horizontal" id="editform" method="post" action="/bidrequest_audit1.do">
+		      	<form class="form-horizontal" id="editform" method="post" action="/bidrequest_audit1">
 					<fieldset>
 						<div id="legend" class="">
 							<legend>满标一审</legend>

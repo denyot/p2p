@@ -27,7 +27,13 @@ public class BidRequestController {
     @Autowired
     private IRealAuthService realAuthService;
 
-
+    /**
+     * 发标前审核列表
+     *
+     * @param qo
+     * @param model
+     * @return
+     */
     @RequestMapping("bidrequest_publishaudit_list")
     public String bidRequest_list(@ModelAttribute("qo") BidRequestQueryObject qo, Model model) {
         qo.setBidRequestState(BidConst.BIDREQUEST_STATE_PUBLISH_PENDING);
@@ -35,6 +41,14 @@ public class BidRequestController {
         return "bidrequest/publish_audit";
     }
 
+    /**
+     * 发标前审核
+     *
+     * @param id
+     * @param remark
+     * @param state
+     * @return
+     */
     @RequestMapping("bidrequest_publishaudit")
     @ResponseBody
     public JsonResult bidRequest_publishAudit(Long id, String remark, Byte state) {
@@ -44,6 +58,7 @@ public class BidRequestController {
 
     /**
      * 借款信息
+     *
      * @param id
      * @param model
      * @return
@@ -59,4 +74,27 @@ public class BidRequestController {
         return "bidrequest/borrow_info";
     }
 
+    /**
+     * 满标一审列表
+     *
+     * @param qo
+     * @param model
+     * @return
+     */
+    @RequestMapping("bidrequest_audit1_list")
+    public String bidrequest_audit1_list(BidRequestQueryObject qo, Model model) {
+        qo.setBidRequestState(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
+        model.addAttribute("pageResult", bidRequestService.bidRequest_list(qo));
+        return "bidrequest/audit1";
+    }
+
+    /**
+     * 满标一审
+     */
+    @RequestMapping("bidrequest_audit1")
+    @ResponseBody
+    public JsonResult bidrequest_audit1(Long id, String remark, Byte state) {
+        bidRequestService.bidRequestFullAudit1(id, remark, state);
+        return new JsonResult();
+    }
 }

@@ -19,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BidRequestServiceImpl implements IBidRequestService {
@@ -95,9 +93,16 @@ public class BidRequestServiceImpl implements IBidRequestService {
         return new PageResult(count, Collections.EMPTY_LIST, qo.getCurrentPage(), qo.getPageSize());
     }
 
+    /**
+     * 发标前审核
+     *
+     * @param id
+     * @param remark
+     * @param state
+     */
     @Override
     public void publishAudit(Long id, String remark, Byte state) {
-        BidRequest bidRequest = bidRequestMapper.selectByPrimaryKey(id);
+        BidRequest bidRequest = this.get(id);
         if (bidRequest != null && bidRequest.getBidRequestState() == BidConst.BIDREQUEST_STATE_PUBLISH_PENDING) {
             BidRequestAuditHistory history = new BidRequestAuditHistory();
             history.setRemark(remark);
@@ -109,6 +114,7 @@ public class BidRequestServiceImpl implements IBidRequestService {
             history.setAuditType(BidRequestAuditHistory.publish_audit);
             history.setState(state);
             bidRequestAuditHistoryMapper.insert(history);
+            //判断审核结果
             if (state == BidRequestAuditHistory.STATE_AUDIT) {
                 bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_BIDDING);
                 bidRequest.setDisableDate(DateUtils.addDays(new Date(), bidRequest.getDisableDays()));
@@ -186,4 +192,69 @@ public class BidRequestServiceImpl implements IBidRequestService {
         }
 
     }
+
+    /**
+     * 满标一审
+     *
+     * @param id
+     * @param remark
+     * @param state
+     */
+    @Override
+    public void bidRequestFullAudit1(Long id, String remark, Byte state) {
+        BidRequest bidRequest = this.get(id);
+        if (bidRequest != null && bidRequest.getBidRequestState() == BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1) {
+            //保存审核历史
+            BidRequestAuditHistory history = new BidRequestAuditHistory();
+            history.setApplier(bidRequest.getCreateUser());
+            history.setApplyTime(bidRequest.getApplyTime());
+            history.setAuditor(UserContext.getCurrent());
+            history.setAuditType(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
+            history.setAuditTime(new Date());
+            history.setBidRequestId(id);
+            history.setState(state);
+            history.setRemark(remark);
+            this.bidRequestAuditHistoryMapper.insert(history);
+            //审核结果判断
+            if (state == BaseAuth.STATE_AUDIT) {
+                bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_2);
+            } else {
+                //修改借款对象状态
+                bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_REJECTED);
+                //修改借款人的状态码
+                Userinfo appler = userinfoService.get(bidRequest.getCreateUser().getId());
+                appler.removeState(BitStatesUtils.OP_HAS_BIDREQUST_IN_PROCESS);
+                userinfoService.update(appler);
+                //退钱
+                returnMoney(bidRequest);
+            }
+            this.update(bidRequest);
+        }
+    }
+
+    /**
+     * 退钱
+     *
+     * @param bidRequest
+     */
+    private void returnMoney(BidRequest bidRequest) {
+        Map<Long, Account> updates = new HashMap<>();
+        for (Bid bid : bidRequest.getBidList()) {
+            Long accountId = bid.getBidUser().getId();
+            Account bidAccount = updates.get(accountId);
+            if (bidAccount == null) {
+                bidAccount = this.accountService.get(accountId);
+                updates.put(accountId, bidAccount);
+            }
+            bidAccount.setUsableAmount(bidAccount.getUsableAmount().add(bid.getAvailableAmount()));
+            bidAccount.setFreezedAmount(bidAccount.getFreezedAmount().subtract(bid.getAvailableAmount()));
+            this.accountFlowService.returnMoney(bid, bidAccount);
+        }
+        for (Account account : updates.values()) {
+            this.accountService.update(account);
+        }
+    }
 }
+
+
+

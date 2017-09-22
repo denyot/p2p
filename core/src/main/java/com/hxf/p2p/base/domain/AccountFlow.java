@@ -2,6 +2,7 @@ package com.hxf.p2p.base.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.Date;

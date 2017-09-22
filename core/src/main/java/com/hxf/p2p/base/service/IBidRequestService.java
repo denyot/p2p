@@ -36,7 +36,19 @@ public interface IBidRequestService {
 
     List<BidRequest> listIndex(int size);
 
-
+    /**
+     * 投标
+     * @param bidRequestId
+     * @param amount
+     */
     void bid(Long bidRequestId, BigDecimal amount);
+
+    /**
+     * 满标一审
+     * @param id
+     * @param remark
+     * @param state
+     */
+    void bidRequestFullAudit1(Long id, String remark, Byte state);
 
 }

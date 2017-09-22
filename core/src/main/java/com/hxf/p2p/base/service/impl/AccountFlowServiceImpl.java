@@ -16,7 +16,6 @@ import java.util.Date;
 public class AccountFlowServiceImpl implements IAccountFlowService {
     @Autowired
     private AccountFlowMapper accountFlowMapper;
-
     /**
      * 创建
      *
@@ -49,5 +48,15 @@ public class AccountFlowServiceImpl implements IAccountFlowService {
         accountFlow.setAmount(bid.getAvailableAmount());
         accountFlow.setNote("投标:" + bid.getBidRequestTitle() + "成功,冻结金额为:" + bid.getAvailableAmount());
         accountFlowMapper.insert(accountFlow);
+    }
+
+    @Override
+    public void returnMoney(Bid bid, Account account) {
+        AccountFlow accountFlow = createFlow(account);
+        accountFlow.setAccountActionType(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
+        accountFlow.setAmount(bid.getAvailableAmount());
+        accountFlow.setNote("投标:" + bid.getBidRequestTitle() + "满标拒绝,解冻资金:" + bid.getAvailableAmount());
+        accountFlowMapper.insert(accountFlow);
+
     }
 }

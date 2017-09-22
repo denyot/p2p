@@ -19,4 +19,12 @@ public interface IAccountFlowService {
      * @param currentAccount  投标账户
      */
     void bid(Bid bid, Account currentAccount);
+
+    /**
+     * 退款流水
+     * @param bid
+     * @param bidAccount
+     */
+    void returnMoney(Bid bid, Account bidAccount);
+
 }
