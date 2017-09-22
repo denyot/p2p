@@ -58,7 +58,7 @@
 							</#if>
 						</li>
 					</ul>
-					<#if userinfo.isBaseInfo && userinfo.isRealAuth && (userinfo.authScore >= creditBorrowScore) && userinfo.isVedioAuth>
+					<#if userinfo.isBaseInfo && userinfo.isRealAuth && userinfo.isVedioAuth>
 						<a href="/borrowInfo" class="el-borrow-apply">
 							申请贷款
 						</a>

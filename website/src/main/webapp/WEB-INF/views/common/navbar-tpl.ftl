@@ -6,7 +6,7 @@
 			</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<li id="index"><a href="/">首页</a></li>
+			<li id="index"><a href="/index">首页</a></li>
 			<li id="invest"><a href="/invest">我要投资</a></li>
 			<li id="borrow"><a href="/borrow">我要借款</a></li>
 			<li id="account"><a href="/personal">个人中心</a></li>

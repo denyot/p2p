@@ -6,6 +6,9 @@
     <link type="text/css" rel="stylesheet" href="/css/account.css"/>
     <script type="text/javascript" src="/js/plugins/uploadify/jquery.uploadify.min.js"></script>
     <script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
+    <script type="text/javascript" src="/js/plugins/jQuery-File-Upload-master/js/vendor/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="/js/plugins/jQuery-File-Upload-master/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="/js/plugins/jQuery-File-Upload-master/js/jquery.fileupload.js"></script>
     <style type="text/css">
         #realAuthForm input, #realAuthForm select {
             width: 260px;
@@ -25,6 +28,11 @@
             width: 120px;
             height: 100px;
             margin-top: 5px;
+        }
+
+        .bar {
+            height: 18px;
+            background: green;
         }
 
         .swfupload {
@@ -76,7 +84,7 @@
                 multi: false,
                 swf: "js/plugins/uploadify/uploadify.swf",
                 uploader: "/realAuthUpload",
-                overrideEvents:["onUploadSuccess"],
+                overrideEvents: ["onUploadSuccess","onselect"],
                 onUploadSuccess: function (file, data) {
                     $("#uploadImg1").prop("src", data);
                     $("#uploadImage1").val(data);
@@ -90,18 +98,18 @@
                 multi: false,
                 swf: "js/plugins/uploadify/uploadify.swf",
                 uploader: "/realAuthUpload",
-                overrideEvents:["onUploadSuccess"],
+                overrideEvents: ["onUploadSuccess"],
                 onUploadSuccess: function (file, data) {
                     $("#uploadImg2").prop("src", data);
                     $("#uploadImage2").val(data);
                 }
             });
-            
+
             $("#realAuthForm").ajaxForm(function () {
-                $.messager.confirm("提示","实名认证申请提交成功",function () {
+                $.messager.confirm("提示", "实名认证申请提交成功", function () {
                     window.location.reload();
                 })
-                
+
             })
         });
     </script>
@@ -169,6 +177,7 @@
                             <div class="col-sm-8">
                                 <input id="address" class="form-control" name="address" type="text"
                                        style="max-width: 100%;width:500px;">
+
                             </div>
                         </div>
 
