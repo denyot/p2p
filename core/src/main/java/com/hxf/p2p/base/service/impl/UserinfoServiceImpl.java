@@ -1,5 +1,6 @@
 package com.hxf.p2p.base.service.impl;
 
+import com.hxf.p2p.base.domain.BidRequest;
 import com.hxf.p2p.base.domain.MailVerify;
 import com.hxf.p2p.base.domain.Userinfo;
 import com.hxf.p2p.base.mapper.MailVerifyMapper;
@@ -112,6 +113,16 @@ public class UserinfoServiceImpl implements IUserinfoService {
             old.setBitState(BitStatesUtils.addState(old.getBitState(), BitStatesUtils.OP_BASE_INFO));
         }
         this.update(old);
+    }
+
+    /**
+     * @param bidRequest
+     */
+    @Override
+    public void removeRequestState(BidRequest bidRequest) {
+        Userinfo userinfo = this.get(bidRequest.getCreateUser().getId());
+        userinfo.removeState(BitStatesUtils.OP_HAS_BIDREQUST_IN_PROCESS);
+        this.update(userinfo);
     }
 
     @Override

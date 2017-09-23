@@ -82,7 +82,7 @@ public class BidRequestController {
      * @return
      */
     @RequestMapping("bidrequest_audit1_list")
-    public String bidrequest_audit1_list(BidRequestQueryObject qo, Model model) {
+    public String bidrequest_audit1_list(@ModelAttribute("qo") BidRequestQueryObject qo, Model model) {
         qo.setBidRequestState(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
         model.addAttribute("pageResult", bidRequestService.bidRequest_list(qo));
         return "bidrequest/audit1";
@@ -95,6 +95,28 @@ public class BidRequestController {
     @ResponseBody
     public JsonResult bidrequest_audit1(Long id, String remark, Byte state) {
         bidRequestService.bidRequestFullAudit1(id, remark, state);
+        return new JsonResult();
+    }
+
+    /**
+     * 满标二审列表
+     * @param qo
+     * @param model
+     * @return
+     */
+    @RequestMapping("bidrequest_audit2_list")
+    public String bidrequest_audit2_list(@ModelAttribute("qo") BidRequestQueryObject qo, Model model) {
+        qo.setBidRequestState(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_2);
+        model.addAttribute("pageResult", bidRequestService.bidRequest_list(qo));
+        return "bidrequest/audit2";
+    }
+    /**
+     * 满标二审
+     */
+    @RequestMapping("bidrequest_audit2")
+    @ResponseBody
+    public JsonResult bidrequest_audit2(Long id, String remark, Byte state) {
+        bidRequestService.bidRequestFullAudit2(id, remark, state);
         return new JsonResult();
     }
 }

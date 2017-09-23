@@ -6,10 +6,7 @@ import com.hxf.p2p.base.mapper.BidMapper;
 import com.hxf.p2p.base.mapper.BidRequestAuditHistoryMapper;
 import com.hxf.p2p.base.mapper.BidRequestMapper;
 import com.hxf.p2p.base.query.BidRequestQueryObject;
-import com.hxf.p2p.base.service.IAccountFlowService;
-import com.hxf.p2p.base.service.IAccountService;
-import com.hxf.p2p.base.service.IBidRequestService;
-import com.hxf.p2p.base.service.IUserinfoService;
+import com.hxf.p2p.base.service.*;
 import com.hxf.p2p.base.util.BidConst;
 import com.hxf.p2p.base.util.BitStatesUtils;
 import com.hxf.p2p.base.util.CalculatetUtil;
@@ -30,11 +27,13 @@ public class BidRequestServiceImpl implements IBidRequestService {
     @Autowired
     private IAccountService accountService;
     @Autowired
-    private BidRequestAuditHistoryMapper bidRequestAuditHistoryMapper;
+    private IBidRequestAuditHistoryService bidRequestAuditHistoryService;
     @Autowired
     private BidMapper bidMapper;
     @Autowired
     private IAccountFlowService accountFlowService;
+    @Autowired
+    private ISystemAccountService systemAccountService;
 
     @Override
     public void update(BidRequest bidRequest) {
@@ -50,6 +49,10 @@ public class BidRequestServiceImpl implements IBidRequestService {
         return userinfo != null && userinfo.getIsVedioAuth() && userinfo.getIsRealAuth() && userinfo.getIsBaseInfo() && !userinfo.getHasBidrequstProcess();
     }
 
+    /**
+     * 借款申请
+     * @param bidRequest
+     */
     @Override
     public void apply(BidRequest bidRequest) {
         Long id = UserContext.getCurrent().getId();
@@ -104,16 +107,8 @@ public class BidRequestServiceImpl implements IBidRequestService {
     public void publishAudit(Long id, String remark, Byte state) {
         BidRequest bidRequest = this.get(id);
         if (bidRequest != null && bidRequest.getBidRequestState() == BidConst.BIDREQUEST_STATE_PUBLISH_PENDING) {
-            BidRequestAuditHistory history = new BidRequestAuditHistory();
-            history.setRemark(remark);
-            history.setApplyTime(bidRequest.getApplyTime());
-            history.setAuditTime(new Date());
-            history.setApplier(bidRequest.getCreateUser());
-            history.setAuditor(UserContext.getCurrent());
-            history.setBidRequestId(bidRequest.getId());
-            history.setAuditType(BidRequestAuditHistory.publish_audit);
-            history.setState(state);
-            bidRequestAuditHistoryMapper.insert(history);
+            //保存审核历史
+            bidRequestAuditHistoryService.insertHistory(bidRequest, id, state, remark, BidRequestAuditHistory.publish_audit);
             //判断审核结果
             if (state == BidRequestAuditHistory.STATE_AUDIT) {
                 bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_BIDDING);
@@ -121,9 +116,7 @@ public class BidRequestServiceImpl implements IBidRequestService {
                 bidRequest.setPublishTime(new Date());
             } else {
                 bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_PUBLISH_REFUSE);
-                Userinfo appler = userinfoService.get(bidRequest.getCreateUser().getId());
-                appler.removeState(BitStatesUtils.OP_HAS_BIDREQUST_IN_PROCESS);
-                userinfoService.update(appler);
+                userinfoService.removeRequestState(bidRequest);
             }
             bidRequest.setNote(remark);
             this.update(bidRequest);
@@ -205,31 +198,69 @@ public class BidRequestServiceImpl implements IBidRequestService {
         BidRequest bidRequest = this.get(id);
         if (bidRequest != null && bidRequest.getBidRequestState() == BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1) {
             //保存审核历史
-            BidRequestAuditHistory history = new BidRequestAuditHistory();
-            history.setApplier(bidRequest.getCreateUser());
-            history.setApplyTime(bidRequest.getApplyTime());
-            history.setAuditor(UserContext.getCurrent());
-            history.setAuditType(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
-            history.setAuditTime(new Date());
-            history.setBidRequestId(id);
-            history.setState(state);
-            history.setRemark(remark);
-            this.bidRequestAuditHistoryMapper.insert(history);
+            bidRequestAuditHistoryService.insertHistory(bidRequest, id, state, remark, BidRequestAuditHistory.full_audit_1);
             //审核结果判断
             if (state == BaseAuth.STATE_AUDIT) {
                 bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_2);
             } else {
-                //修改借款对象状态
-                bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_REJECTED);
-                //修改借款人的状态码
-                Userinfo appler = userinfoService.get(bidRequest.getCreateUser().getId());
-                appler.removeState(BitStatesUtils.OP_HAS_BIDREQUST_IN_PROCESS);
-                userinfoService.update(appler);
-                //退钱
-                returnMoney(bidRequest);
+                this.rejectHandle(bidRequest);
             }
             this.update(bidRequest);
         }
+    }
+
+    /**
+     * 满标二审
+     *
+     * @param id
+     * @param remark
+     * @param state
+     */
+    @Override
+    public void bidRequestFullAudit2(Long id, String remark, Byte state) {
+        BidRequest br = this.get(id);
+        if (br != null && br.getBidRequestState() == BidConst.BIDREQUEST_STATE_APPROVE_PENDING_2) {
+            //保存审核历史
+            bidRequestAuditHistoryService.insertHistory(br, id, state, remark, BidRequestAuditHistory.full_audit_2);
+            //审核结果判断
+            if (state == BaseAuth.STATE_AUDIT) {
+                //借款状态
+                br.setBidRequestState(BidConst.BIDREQUEST_STATE_PAYING_BACK);
+                //借款人账户和流水
+                Account borrowAccount = accountService.get(br.getCreateUser().getId());
+                borrowAccount.addUsableAmount(br.getBidRequestAmount());
+                borrowAccount.addUnReturnAmount(br.getBidRequestAmount().add(br.getTotalRewardAmount()));
+                borrowAccount.setBorrowLimitAmount(borrowAccount.getRemainBorrowLimit().subtract(br.getBidRequestAmount()));
+                accountFlowService.borrowSuccess(br,borrowAccount);
+                //移除借款人,借款中状态
+                userinfoService.removeRequestState(br);
+                //支付借款手续费
+                BigDecimal managementCharge = CalculatetUtil.calAccountManagementCharge(br.getBidRequestAmount());
+                borrowAccount.setUsableAmount(borrowAccount.getUsableAmount().subtract(managementCharge));
+                accountFlowService.BorrowChargeFee(br,borrowAccount,managementCharge);
+            } else {
+                //满审拒绝处理
+                this.rejectHandle(br);
+            }
+            this.update(br);
+        }
+
+    }
+
+    /**
+     * 满审拒绝后处理程序
+     *
+     * @param bidRequest
+     */
+    private void rejectHandle(BidRequest bidRequest) {
+        //修改借款对象状态
+        bidRequest.setBidRequestState(BidConst.BIDREQUEST_STATE_REJECTED);
+        //修改借款人的状态码
+        Userinfo appler = userinfoService.get(bidRequest.getCreateUser().getId());
+        appler.removeState(BitStatesUtils.OP_HAS_BIDREQUST_IN_PROCESS);
+        userinfoService.update(appler);
+        //退钱
+        this.returnMoney(bidRequest);
     }
 
     /**

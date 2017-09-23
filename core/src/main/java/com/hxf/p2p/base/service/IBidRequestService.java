@@ -51,4 +51,11 @@ public interface IBidRequestService {
      */
     void bidRequestFullAudit1(Long id, String remark, Byte state);
 
+    /**
+     * 满标二审
+     * @param id
+     * @param remark
+     * @param state
+     */
+    void bidRequestFullAudit2(Long id, String remark, Byte state);
 }

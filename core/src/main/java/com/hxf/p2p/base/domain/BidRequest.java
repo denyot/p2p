@@ -36,7 +36,7 @@ public class BidRequest {
 
     private Integer bidCount = 0;//本借款已有投标数量
 
-    private BigDecimal totalRewardAmount;//总收益
+    private BigDecimal totalRewardAmount;//总利息
 
     private BigDecimal currentSum = BidConst.ZERO;//当前投标金额之和
 

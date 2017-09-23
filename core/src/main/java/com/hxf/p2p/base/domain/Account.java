@@ -26,14 +26,32 @@ public class Account {
     private BigDecimal unReceiveInterest = BidConst.ZERO;//待收利息
 
 
-    private BigDecimal unReturnAmount = BidConst.ZERO;//待还金额
+    private BigDecimal unReturnAmount = BidConst.ZERO;//待还本息
 
     private BigDecimal remainBorrowLimit = BidConst.INIT_BORROW_LIMIT;//账户剩余授信额度
 
     private BigDecimal borrowLimitAmount = BidConst.INIT_BORROW_LIMIT;//账户授信额度
 
     /**
+     * 可用余额增加
+     *
+     * @param amount
+     */
+    public void addUsableAmount(BigDecimal amount) {
+        this.setUsableAmount(this.usableAmount.add(amount));
+    }
+
+    /**
+     * 待还本息增加
+     * @param amount
+     */
+    public void addUnReturnAmount(BigDecimal amount) {
+        this.setUnReturnAmount(this.unReturnAmount.add(amount));
+    }
+
+    /**
      * 总金额
+     *
      * @return
      */
     public BigDecimal getTotalAmount() {

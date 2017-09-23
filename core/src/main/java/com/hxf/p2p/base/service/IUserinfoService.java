@@ -1,6 +1,8 @@
 package com.hxf.p2p.base.service;
 
+import com.hxf.p2p.base.domain.BidRequest;
 import com.hxf.p2p.base.domain.Userinfo;
+import com.hxf.p2p.base.util.BitStatesUtils;
 
 public interface IUserinfoService {
     void update(Userinfo userinfo);
@@ -45,4 +47,9 @@ public interface IUserinfoService {
      * @param userinfo
      */
     void updateBasicInfo(Userinfo userinfo);
+
+    /**
+     *
+     */
+    void removeRequestState(BidRequest bidRequest);
 }

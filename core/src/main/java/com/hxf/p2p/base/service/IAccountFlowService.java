@@ -2,7 +2,10 @@ package com.hxf.p2p.base.service;
 
 import com.hxf.p2p.base.domain.Account;
 import com.hxf.p2p.base.domain.Bid;
-import com.hxf.p2p.base.domain.RechargeOffline; /**
+import com.hxf.p2p.base.domain.BidRequest;
+import com.hxf.p2p.base.domain.RechargeOffline;
+
+import java.math.BigDecimal; /**
  * 账户流水
  */
 public interface IAccountFlowService {
@@ -27,4 +30,18 @@ public interface IAccountFlowService {
      */
     void returnMoney(Bid bid, Account bidAccount);
 
+    /**
+     * 借款成功收款流水
+     * @param bidRequest
+     * @param borrowAccount
+     */
+    void borrowSuccess(BidRequest bidRequest, Account borrowAccount);
+
+    /**
+     * 借款手续费流水
+     * @param br
+     * @param borrowAccount
+     * @param managementCharge
+     */
+    void BorrowChargeFee(BidRequest br, Account borrowAccount, BigDecimal managementCharge);
 }

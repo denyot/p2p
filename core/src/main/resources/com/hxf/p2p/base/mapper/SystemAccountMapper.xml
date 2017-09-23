@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hxf.p2p.base.mapper.SystemAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.hxf.p2p.base.domain.SystemAccount" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="beginDate" property="beginDate" jdbcType="TIMESTAMP" />
+    <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="totalBalance" property="totalBalance" jdbcType="DECIMAL" />
+    <result column="freezedAmount" property="freezedAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from systemaccount
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hxf.p2p.base.domain.SystemAccount" useGeneratedKeys="true" keyProperty="id" >
+    insert into systemaccount (version, beginDate, endDate, 
+      createDate, totalBalance, freezedAmount
+      )
+    values (#{version,jdbcType=INTEGER}, #{beginDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{totalBalance,jdbcType=DECIMAL}, #{freezedAmount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hxf.p2p.base.domain.SystemAccount" >
+    update systemaccount
+    set version = #{version,jdbcType=INTEGER},
+      beginDate = #{beginDate,jdbcType=TIMESTAMP},
+      endDate = #{endDate,jdbcType=TIMESTAMP},
+      createDate = #{createDate,jdbcType=TIMESTAMP},
+      totalBalance = #{totalBalance,jdbcType=DECIMAL},
+      freezedAmount = #{freezedAmount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, version, beginDate, endDate, createDate, totalBalance, freezedAmount
+    from systemaccount
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, version, beginDate, endDate, createDate, totalBalance, freezedAmount
+    from systemaccount
+  </select>
+</mapper>
